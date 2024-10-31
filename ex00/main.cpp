@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:22:36 by anarama           #+#    #+#             */
-/*   Updated: 2024/10/31 11:56:29 by anarama          ###   ########.fr       */
+/*   Updated: 2024/10/31 14:38:05 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@ int main(int argc, char **argv) {
 	}
 	BitcoinExchange a(argv[1]);
 	a.initMap();
+	a.parseInput();
 	return 0;
 }

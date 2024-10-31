@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:22:02 by anarama           #+#    #+#             */
-/*   Updated: 2024/10/31 15:50:48 by anarama          ###   ########.fr       */
+/*   Updated: 2024/10/31 18:33:31 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	BitcoinExchange::initMap( void ) {
 		std::istringstream ss(tempStr);
 		if (std::getline(ss, date, ',') && std::getline(ss, rateStr)) {
 			std::istringstream(rateStr) >> rate;
-			this->_mapData[date] = rate;
+			this->_mapData[date + " "] = rate;
 		}
 	}
 	// for (std::map<std::string, float>::iterator it = this->_mapData.begin(); it != this->_mapData.end(); it++) {
@@ -60,7 +60,7 @@ void	BitcoinExchange::initMap( void ) {
 	// }
 }
 
-void	BitcoinExchange::isValidDate( std::string& date ) {
+bool	BitcoinExchange::isValidDate( std::string& date ) {
 	int year;
 	int month;
 	int day;
@@ -70,33 +70,48 @@ void	BitcoinExchange::isValidDate( std::string& date ) {
 
 	if (date.length() != 11 || date[date.length() - 1] != ' ') {
 		std::cout << "Error: bad input. Invalid date" << std::endl;
-		return ;
+		return false;
 	}
-	if (!(ss >> year >> month >> day >> dash1 >> dash2) || dash1 != '-' || dash2 != '-') {
+	if (!(ss >> year >> dash1 >> month >> dash2 >> day) || dash1 != '-' || dash2 != '-') {
 		std::cout << "Error: bad input. Invalid date" << std::endl;
-		return ;
+		return false;
 	}
 	if (year < 0) {
 		std::cout << "Error: bad input. Invalid year" << std::endl;
-		return ;
+		return false;
 	}
 	if (month < 1 || month > 12) {
 		std::cout << "Error: bad input. Invalid month" << std::endl;
-		return ;
+		return false;
 	}
-	// need more pricise checks
-	if (day < 1 || day > 31) {
-		std::cout << "Error: bad input. Invalid day" << std::endl;
-		return ;
+	bool isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+	int maxDays = 31;
+	switch (month) {
+		case 2:
+			maxDays = isLeapYear ? 29 : 28;
+			break;
+		case 4: case 6: case 9: case 11:
+			maxDays = 30;
+			break;
+		default:
+			maxDays = 31;
 	}
+	if (day < 1 || day > maxDays) {
+		std::cout << "Error: bad input. Invalid day for the given month" << std::endl;
+		return false;
+	}
+	return true;
 }
 
-void	BitcoinExchange::isValidRate( float rate ) {
+bool	BitcoinExchange::isValidRate( float rate ) {
 	if (rate < 0) {
 		std::cout << "Error: not a positive number." << std::endl;
+		return false;
 	} else if (rate > 1000) {
 		std::cout << "Error: too large a number." << std::endl;
+		return false;
 	}
+	return true;
 }
 
 void	BitcoinExchange::parseInput( void ) {
@@ -106,6 +121,10 @@ void	BitcoinExchange::parseInput( void ) {
 	std::string tempStr;
 
 	std::getline(this->_inputFile, tempStr); // skip the header
+	if (tempStr != "date | value") {
+		std::cout << "incorrect file format!" << std::endl;
+		return ;
+	}
 	while (std::getline(this->_inputFile, tempStr)) {
 		std::istringstream ss(tempStr);
 		if (!std::getline(ss, date, '|')
@@ -113,9 +132,13 @@ void	BitcoinExchange::parseInput( void ) {
 			std::cout << "Error: bad input => " << date << std::endl;
 			continue;
 		}
-		this->isValidDate(date);
+		if (this->isValidDate(date) == false) {
+			continue ;
+		}
 		std::istringstream(rateStr) >> rate;
-		this->isValidRate(rate);
-		std::cout << date << "|" << rateStr << std::endl;
+		if (!this->isValidRate(rate)) {
+			continue ;
+		}
+		std::cout << date << "=>" << rateStr << " = " << this->_mapData[date] * rate << std::endl;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:22:04 by anarama           #+#    #+#             */
-/*   Updated: 2024/10/27 21:00:45 by anarama          ###   ########.fr       */
+/*   Updated: 2024/10/31 11:55:39 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,23 @@
 
 class BitcoinExchange {
 	private:
-		std::map<std::string, int> _inputData;
+		std::map<std::string, float> _mapData;
 		std::ifstream _inputFile;
 		std::ifstream _data;
 
 	public:
 		BitcoinExchange( void );
-		BitcoinExchange( std::string& fileName );
+		BitcoinExchange( char* fileName );
 		BitcoinExchange( const BitcoinExchange& other );
 		BitcoinExchange& operator=( const BitcoinExchange& other );
 		~BitcoinExchange( void );
 
 		void	displayValue();
-		void	initMap();
+		void	initMap( void );
 		void	parseInput();
 		void	exchange();
+		void	checkDate();
+		void	checkRate();
 };
 
 # endif // BITCOIN_EXCHANGE_HPP

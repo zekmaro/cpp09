@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:22:02 by anarama           #+#    #+#             */
-/*   Updated: 2024/10/31 15:35:24 by anarama          ###   ########.fr       */
+/*   Updated: 2024/10/31 15:50:48 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,10 @@ void	BitcoinExchange::isValidDate( std::string& date ) {
 	char dash2;
 	std::istringstream ss(date);
 
+	if (date.length() != 11 || date[date.length() - 1] != ' ') {
+		std::cout << "Error: bad input. Invalid date" << std::endl;
+		return ;
+	}
 	if (!(ss >> year >> month >> day >> dash1 >> dash2) || dash1 != '-' || dash2 != '-') {
 		std::cout << "Error: bad input. Invalid date" << std::endl;
 		return ;

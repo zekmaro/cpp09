@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:51:53 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/05 12:55:59 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/05 14:32:27 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,25 @@
 # define RPN_HPP
 
 # include <stack>
+# include <string>
+# include <exception>
 
 class RPN {
 	private:
-		std::stack<char> stack;
-	private:
+		std::stack<int> stack;
+	public:
 		RPN( void );
 		RPN( const RPN& other );
 		RPN& operator=( const RPN& other );
 		~RPN( void );
+
+		class DivisionByZeroException: public std::exception {
+			public:
+				const char* what() const throw();
+		};
+
+		void fillStack( const std::string& input );
+		bool validateFormat( const std::string& input );
 };
 
 #endif // RPN_HPP

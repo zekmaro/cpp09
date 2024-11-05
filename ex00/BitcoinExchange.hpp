@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:22:04 by anarama           #+#    #+#             */
-/*   Updated: 2024/10/31 17:54:36 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/05 12:49:27 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,18 @@ class BitcoinExchange {
 		BitcoinExchange& operator=( const BitcoinExchange& other );
 		~BitcoinExchange( void );
 
+		class CouldntOpenFileException: public std::exception {
+			public:
+				const char* what() const throw();
+		};
+
 		void	initMap( void );
 		void	parseInput( void );
 
-		bool	isValidDate( std::string& date );
-		
-		bool	isValidRate( float rate );
+		bool	isValidDate( std::string& dateStr );
+		bool	isValidRate( std::string& rateStr );
+
+		void	exhange( std::string& dateStr, std::string& rateStr, float rate);
 };
 
 # endif // BITCOIN_EXCHANGE_HPP

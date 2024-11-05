@@ -6,11 +6,12 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:22:02 by anarama           #+#    #+#             */
-/*   Updated: 2024/10/31 18:33:31 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/05 12:49:38 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
+#include <cctype>
 #include <map>
 #include <string>
 #include <sstream>
@@ -20,10 +21,11 @@ BitcoinExchange::BitcoinExchange( void ) {}
 
 BitcoinExchange::BitcoinExchange( char* fileName ) : _inputFile(fileName), _data("data.csv") {
 	if (!this->_inputFile.is_open()) {
-		// custom file exception
+		throw CouldntOpenFileException();
 	}
 	if (!this->_data.is_open()) {
-		// custom file exception
+		this->_inputFile.close();
+		throw CouldntOpenFileException();
 	}
 }
 
@@ -34,6 +36,10 @@ BitcoinExchange::BitcoinExchange( const BitcoinExchange& other ) {
 BitcoinExchange& BitcoinExchange::operator=( const BitcoinExchange& other ) {
 	(void)other;
 	return *this;
+}
+
+const char* BitcoinExchange::CouldntOpenFileException::what() const throw() {
+	return "Incorrect file! Couldnt open it";
 }
 
 BitcoinExchange::~BitcoinExchange( void ) {
@@ -55,9 +61,6 @@ void	BitcoinExchange::initMap( void ) {
 			this->_mapData[date + " "] = rate;
 		}
 	}
-	// for (std::map<std::string, float>::iterator it = this->_mapData.begin(); it != this->_mapData.end(); it++) {
-	// 	std::cout << "Date: " << it->first << ", Exchange Rate: " << it->second << std::endl;
-	// }
 }
 
 bool	BitcoinExchange::isValidDate( std::string& date ) {
@@ -103,7 +106,16 @@ bool	BitcoinExchange::isValidDate( std::string& date ) {
 	return true;
 }
 
-bool	BitcoinExchange::isValidRate( float rate ) {
+bool	BitcoinExchange::isValidRate( std::string& rateStr ) {
+	float rate;
+
+	for (unsigned int i = 0; i < rateStr.length(); i++) {
+		if (std::isalpha(rateStr[i])) {
+			std::cout << "Error: letters found in the rate." << std::endl;
+			return false;
+		}
+	}
+	std::istringstream(rateStr) >> rate;
 	if (rate < 0) {
 		std::cout << "Error: not a positive number." << std::endl;
 		return false;
@@ -116,7 +128,7 @@ bool	BitcoinExchange::isValidRate( float rate ) {
 
 void	BitcoinExchange::parseInput( void ) {
 	float rate;
-	std::string date;
+	std::string dateStr;
 	std::string rateStr;
 	std::string tempStr;
 
@@ -127,18 +139,34 @@ void	BitcoinExchange::parseInput( void ) {
 	}
 	while (std::getline(this->_inputFile, tempStr)) {
 		std::istringstream ss(tempStr);
-		if (!std::getline(ss, date, '|')
+		if (!std::getline(ss, dateStr, '|')
 		|| !std::getline(ss, rateStr)) {
-			std::cout << "Error: bad input => " << date << std::endl;
+			std::cout << "Error: bad input => " << dateStr << std::endl;
 			continue;
 		}
-		if (this->isValidDate(date) == false) {
+		if (this->isValidDate(dateStr) == false) {
 			continue ;
 		}
-		std::istringstream(rateStr) >> rate;
-		if (!this->isValidRate(rate)) {
+		if (this->isValidRate(rateStr) == false) {
 			continue ;
+		} else {
+			std::istringstream(rateStr) >> rate;
 		}
-		std::cout << date << "=>" << rateStr << " = " << this->_mapData[date] * rate << std::endl;
+		this->exhange(dateStr, rateStr, rate);
 	}
+}
+
+void	BitcoinExchange::exhange( std::string& dateStr, std::string& rateStr, float rate) {
+	std::map<std::string, float>::iterator it = this->_mapData.find(dateStr);
+	if (it == this->_mapData.end()) {
+		it = this->_mapData.begin();
+		if (dateStr < it->first) {
+			std::cout << "Date is less than the very first date in the data set!" << std::endl;
+			return ;
+		}
+		while (it->first < dateStr) {
+			it++;
+		}
+	}
+	std::cout << dateStr << "=>" << rateStr << " = " << it->second * rate << std::endl;
 }

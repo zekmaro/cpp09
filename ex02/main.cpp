@@ -6,12 +6,12 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:29 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/05 15:01:02 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/08 17:13:23 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
 
 int main(int argc, char** argv) {
-	return 0;	
+	return 0;
 }

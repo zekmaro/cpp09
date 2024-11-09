@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/09 12:54:32 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/09 15:47:30 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #include "PmergeMe.hpp"
 
-PmergeMe::PmergeMe( void ) {}
+PmergeMe::PmergeMe( void ) : _comparesentCounter(DEFAULT_COMPARESENT_COUNTER) {}
 
 PmergeMe::PmergeMe( const PmergeMe& other ) {
 	(void) other;
@@ -39,6 +39,10 @@ const char* PmergeMe::IsIntegerOverflowException::what() const throw() {
 
 const char* PmergeMe::EmptyInputException::what() const throw() {
 	return "Error!\nEmpty input!";
+}
+
+int PmergeMe::getComparesentCounter( void ) const {
+	return this->_comparesentCounter;
 }
 
 bool PmergeMe::IsIntegerOverflow(std::string& number) {
@@ -68,10 +72,48 @@ void PmergeMe::convertStringToVector( std::vector<std::string>& args ) {
         int num = static_cast<int>(value);
         this->_vector.push_back(num);
     }
+	this->generateJacobsthalSequence(this->_vector.size());
 }
 
-void PmergeMe::mergeInsertion( void ) {
-	
+// void PmergeMe::binaryInsertion( void );
+
+void PmergeMe::mergeInsertion() {
+	std::vector<int> tempLittleVector;
+	std::vector<int> tempBigVector;
+	int last;
+
+	std::cout << "===BIG===" << std::endl;
+	this->printVector();
+	if (this->_vector.size() % 2 == 1) {
+		last = this->_vector.back();
+		std::cout << "Last: " << last << std::endl;
+		this->_vector.pop_back();
+	}
+	std::cout << "===BIG===" << std::endl;
+	if (this->_vector.size() <= 2) {
+		return ;
+	}
+	for (std::vector<int>::iterator it = this->_vector.begin(); it != this->_vector.end(); it += 2) {
+		if (it + 1 != this->_vector.end()) {
+			if (*(it + 1) < *it) {
+				std::swap(*it, *(it + 1));
+			}
+			this->_comparesentCounter++;
+		}
+		tempLittleVector.push_back(*it);
+		tempBigVector.push_back(*(it + 1));
+	}
+	this->_vector = tempBigVector;
+	std::cout << "===LITTLE===" << std::endl;
+	for (std::vector<int>::iterator it = tempLittleVector.begin(); it != tempLittleVector.end(); it++) {
+		std::cout << *it << " ";
+	}
+	std::cout << std::endl;
+	std::cout << "===LITTLE===" << std::endl;
+	this->mergeInsertion();
+	for (int i = 0; i < this->_vector.size(); i++) {
+		
+	}
 }
 
 void PmergeMe::printVector( void ) {
@@ -79,4 +121,27 @@ void PmergeMe::printVector( void ) {
 		std::cout << *it << " ";
 	}
 	std::cout << std::endl;
+}
+
+void PmergeMe::generateJacobsthalSequence( int size ) {
+	int j0 = 1;
+	int j1 = 1;
+	int jn;
+	int max = 1;
+
+	this->_jacobSequence.push_back(1);
+	for (int i = 0; i < size; i++) {
+		jn = 2 * j0 + j1;
+		this->_jacobSequence.push_back(jn);
+		for (int k = jn - 1; k > max; k--) {
+			this->_jacobSequence.push_back(k);
+		}
+		j0 = j1;
+		max = jn;
+		j1 = jn;
+	}
+	// for (std::vector<int>::iterator it = this->_jacobSequence.begin(); it != this->_jacobSequence.end(); it++) {
+	// 	std::cout << *it << " ";
+	// }
+	// std::cout << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:24 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/09 12:52:32 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/09 15:40:58 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,14 @@
 # include <deque>
 # include <string>
 
+# define DEFAULT_COMPARESENT_COUNTER 0
+
 class PmergeMe {
 	private:
 		std::vector<int> _vector;
+		std::vector<int> _jacobSequence;
 		std::deque<int> _deque;
+		int _comparesentCounter;
 
 	public:
 		PmergeMe( void );
@@ -44,11 +48,17 @@ class PmergeMe {
 				const char* what() const throw();
 		};
 
+		int getComparesentCounter( void ) const;
+
 		bool IsIntegerOverflow( std::string& number );
 		void convertStringToVector( std::vector<std::string>& args );
 
 		void mergeInsertion( void );
+		void binaryInsertion( void );
+		
 		void printVector( void );
+
+		void generateJacobsthalSequence( int size );
 };
 
 #endif // PMERGE_ME_HPP

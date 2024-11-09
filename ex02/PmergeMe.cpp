@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/09 15:47:30 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/09 18:50:10 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,24 @@ void PmergeMe::convertStringToVector( std::vector<std::string>& args ) {
 	this->generateJacobsthalSequence(this->_vector.size());
 }
 
-// void PmergeMe::binaryInsertion( void );
+void PmergeMe::binaryInsertion(unsigned int start, unsigned int end, int value) {
+	std::cout << "start: " << start << " end: " << end << " value: " << value << std::endl;
+    if (end - start == 1 || start - end == 1 || start == end) {
+		this->_comparesentCounter++;
+        this->_vector.insert(this->_vector.begin() + start, value);
+        return;
+    }
+
+    int medium = (start + end) / 2;
+
+    if (value > this->_vector[medium]) {
+        this->binaryInsertion(medium + 1, end, value);
+		this->_comparesentCounter++;
+    } else {
+        this->binaryInsertion(start, medium, value);
+		this->_comparesentCounter++;
+    }
+}
 
 void PmergeMe::mergeInsertion() {
 	std::vector<int> tempLittleVector;
@@ -91,6 +108,9 @@ void PmergeMe::mergeInsertion() {
 	}
 	std::cout << "===BIG===" << std::endl;
 	if (this->_vector.size() <= 2) {
+		if (this->_vector[1] < this->_vector[0]) {
+			std::swap(this->_vector[1] , this->_vector[0]);
+		}
 		return ;
 	}
 	for (std::vector<int>::iterator it = this->_vector.begin(); it != this->_vector.end(); it += 2) {
@@ -111,7 +131,16 @@ void PmergeMe::mergeInsertion() {
 	std::cout << std::endl;
 	std::cout << "===LITTLE===" << std::endl;
 	this->mergeInsertion();
-	for (int i = 0; i < this->_vector.size(); i++) {
+	std::cout << "===LITTLE AFTER===" << std::endl;
+	for (std::vector<int>::iterator it = tempLittleVector.begin(); it != tempLittleVector.end(); it++) {
+		std::cout << *it << " ";
+	}
+	std::cout << std::endl;
+	std::cout << "===LITTLE AFTER===" << std::endl;
+	for (unsigned int i = 0; i < this->_jacobSequence.size(); i++) {
+		if (i == 0) {
+			this->_vector.insert(this->_vector.begin(), tempLittleVector[i]);
+		}
 		
 	}
 }

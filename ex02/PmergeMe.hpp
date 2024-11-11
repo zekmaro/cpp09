@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:24 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/09 16:13:24 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/11 13:51:20 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 class PmergeMe {
 	private:
 		std::vector<int> _vector;
+		std::vector<std::pair<int, int> > _pairedValues;
+		int counter;
 		std::vector<int> _jacobSequence;
 		std::deque<int> _deque;
 		int _comparesentCounter;

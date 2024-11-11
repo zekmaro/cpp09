@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:29 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/09 14:59:50 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/11 10:54:53 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ int main(int argc, char** argv) {
 	try {
 		PmergeMe a;
 		a.convertStringToVector(args);
-		std::cout << "INPUT: ";
-		a.printVector();
+		// std::cout << "INPUT: " << std::endl;
+		// a.printVector();
 		a.mergeInsertion();
-		std::cout << "OUTPUT: ";
-		a.printVector();
+		// std::cout << "OUTPUT: " << std::endl;
+		// a.printVector();
 		std::cout << "Num of comparesents: " << a.getComparesentCounter() << std::endl;
 		a.generateJacobsthalSequence(10);
 	} catch (std::exception& e) {

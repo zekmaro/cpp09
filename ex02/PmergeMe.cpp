@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/09 18:50:10 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/11 14:27:59 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #include "PmergeMe.hpp"
 
-PmergeMe::PmergeMe( void ) : _comparesentCounter(DEFAULT_COMPARESENT_COUNTER) {}
+PmergeMe::PmergeMe( void ) : _comparesentCounter(DEFAULT_COMPARESENT_COUNTER) {counter = 0;}
 
 PmergeMe::PmergeMe( const PmergeMe& other ) {
 	(void) other;
@@ -75,88 +75,91 @@ void PmergeMe::convertStringToVector( std::vector<std::string>& args ) {
 	this->generateJacobsthalSequence(this->_vector.size());
 }
 
-void PmergeMe::binaryInsertion(unsigned int start, unsigned int end, int value) {
-	std::cout << "start: " << start << " end: " << end << " value: " << value << std::endl;
-    if (end - start == 1 || start - end == 1 || start == end) {
-		this->_comparesentCounter++;
-        this->_vector.insert(this->_vector.begin() + start, value);
-        return;
+// void PmergeMe::binaryInsertion(unsigned int start, unsigned int end, int value) {
+
+// }
+
+void printPairs(const std::vector<std::pair<int, int> >& pairedValues) {
+    // First, print all upper values
+    for (std::vector<std::pair<int, int> >::const_iterator it = pairedValues.begin(); it != pairedValues.end(); ++it) {
+        std::cout << it->second << " ";
+    }
+    std::cout << std::endl;
+
+    // Then, print all corresponding lower values
+    for (std::vector<std::pair<int, int> >::const_iterator it = pairedValues.begin(); it != pairedValues.end(); ++it) {
+        std::cout << it->first << " ";
     }
 
-    int medium = (start + end) / 2;
+    std::cout << std::endl;
 
-    if (value > this->_vector[medium]) {
-        this->binaryInsertion(medium + 1, end, value);
-		this->_comparesentCounter++;
-    } else {
-        this->binaryInsertion(start, medium, value);
-		this->_comparesentCounter++;
-    }
+	//std::cout << "HOW IT ACTUALLY LOOK LIKE: "
 }
 
 void PmergeMe::mergeInsertion() {
-	std::vector<int> tempLittleVector;
-	std::vector<int> tempBigVector;
-	int last;
+	int last = -1;
 
-	std::cout << "===BIG===" << std::endl;
 	this->printVector();
+
 	if (this->_vector.size() % 2 == 1) {
 		last = this->_vector.back();
-		std::cout << "Last: " << last << std::endl;
 		this->_vector.pop_back();
 	}
-	std::cout << "===BIG===" << std::endl;
-	if (this->_vector.size() <= 2) {
-		if (this->_vector[1] < this->_vector[0]) {
-			std::swap(this->_vector[1] , this->_vector[0]);
-		}
-		return ;
+
+	if (this->_vector.size() <= 3) {
+		std::cout << "RECURSION STOP" << std::endl;
+		return;
 	}
+
+	this->_pairedValues.clear();
 	for (std::vector<int>::iterator it = this->_vector.begin(); it != this->_vector.end(); it += 2) {
 		if (it + 1 != this->_vector.end()) {
 			if (*(it + 1) < *it) {
 				std::swap(*it, *(it + 1));
 			}
+			this->_pairedValues.push_back(std::make_pair(*it, *(it + 1)));
 			this->_comparesentCounter++;
 		}
-		tempLittleVector.push_back(*it);
-		tempBigVector.push_back(*(it + 1));
 	}
-	this->_vector = tempBigVector;
-	std::cout << "===LITTLE===" << std::endl;
-	for (std::vector<int>::iterator it = tempLittleVector.begin(); it != tempLittleVector.end(); it++) {
-		std::cout << *it << " ";
+	if (last != -1) {
+		this->_pairedValues.push_back(std::make_pair(last, -1));
 	}
-	std::cout << std::endl;
-	std::cout << "===LITTLE===" << std::endl;
+
+	printPairs(this->_pairedValues);
+
+	this->_vector.clear();
+	for (size_t i = 0; i < this->_pairedValues.size(); i++) {
+		this->_vector.push_back(this->_pairedValues[i].second);
+	}
+
 	this->mergeInsertion();
-	std::cout << "===LITTLE AFTER===" << std::endl;
-	for (std::vector<int>::iterator it = tempLittleVector.begin(); it != tempLittleVector.end(); it++) {
-		std::cout << *it << " ";
-	}
-	std::cout << std::endl;
-	std::cout << "===LITTLE AFTER===" << std::endl;
-	for (unsigned int i = 0; i < this->_jacobSequence.size(); i++) {
-		if (i == 0) {
-			this->_vector.insert(this->_vector.begin(), tempLittleVector[i]);
-		}
-		
-	}
+
+	// if (this->_pairedValues.size() <= 3) {
+	// 	if (this->_pairedValues[0].second > this->_pairedValues[1].second) {
+	// 		std::swap(this->_pairedValues[0].second, this->_pairedValues[1].second);
+	// 		this->_comparesentCounter++;
+	// 	}
+	// }
+
+	//this->_pairedValues.insert(this->_pairedValues.begin(), std::make_pair(-1, this->_pairedValues[0].first));
+
+	printPairs(this->_pairedValues);
 }
 
 void PmergeMe::printVector( void ) {
+	std::cout << "======" << std::endl;
 	for (std::vector<int>::iterator it = this->_vector.begin(); it != this->_vector.end(); it++) {
 		std::cout << *it << " ";
 	}
 	std::cout << std::endl;
+	std::cout << "======" << std::endl;
 }
 
 void PmergeMe::generateJacobsthalSequence( int size ) {
 	int j0 = 1;
 	int j1 = 1;
-	int jn;
 	int max = 1;
+	int jn;
 
 	this->_jacobSequence.push_back(1);
 	for (int i = 0; i < size; i++) {
@@ -169,8 +172,4 @@ void PmergeMe::generateJacobsthalSequence( int size ) {
 		max = jn;
 		j1 = jn;
 	}
-	// for (std::vector<int>::iterator it = this->_jacobSequence.begin(); it != this->_jacobSequence.end(); it++) {
-	// 	std::cout << *it << " ";
-	// }
-	// std::cout << std::endl;
 }

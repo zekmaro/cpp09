@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
+/*   By: andrejarama <andrejarama@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:24 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/11 13:51:20 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/11 18:25:26 by andrejarama      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ class PmergeMe {
 		void printVector( void );
 
 		void generateJacobsthalSequence( int size );
+
+		void initPairs( std::vector<int>& vector );
 };
 
 #endif // PMERGE_ME_HPP

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrejarama <andrejarama@student.42.fr>    +#+  +:+       +#+        */
+/*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/11 18:53:38 by andrejarama      ###   ########.fr       */
+/*   Updated: 2024/11/11 19:06:07 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,61 +106,11 @@ void printVector( std::vector<int>& vector ) {
 }
 
 void perfect_algorithm( std::vector<int>& upper ) {
-	std::vector<std::pair<int, int> > tempPairs;
-	std::vector<int> newUpper;
-	std::vector<int> newLower;
-
-	if (upper.size() <= 3) {
-		return ;
-	}
-
-	for (std::vector<int>::iterator it = upper.begin(); it != upper.end(); it += 2) {
-		if (it + 1 != upper.end()) {
-			if (*(it + 1) < *it) {
-				std::swap(*it, *(it + 1));
-			}
-			tempPairs.push_back(std::make_pair(*it, *(it + 1)));
-			// this->_comparesentCounter++;
-		}
-	}
 	
-	for (std::vector<std::pair<int, int> >::const_iterator it = tempPairs.begin(); it != tempPairs.end(); it += 1) {
-		if (it->first > it->second) {
-			std::swap(it->first, it->second);
-		}
-		newLower.push_back(it->first);
-		newUpper.push_back(it->second);
-		// this->_comparesentCounter++;
-	}
-	perfect_algorithm(newUpper);
-	printVector(newUpper);
 }
 
 void PmergeMe::mergeInsertion() {
-	std::vector<int> upper;
-	std::vector<int> lower;
-	int last = -1;
 
-	this->printVector();
-
-	if (this->_vector.size() % 2 == 1) {
-		last = this->_vector.back();
-		this->_vector.pop_back();
-	}
-	
-	for (std::vector<std::pair<int, int> >::const_iterator it = this->_pairedValues.begin(); it != this->_pairedValues.end(); it += 1) {
-		if (it->first > it->second) {
-			std::swap(it->first, it->second);
-		}
-		lower.push_back(it->first);
-		upper.push_back(it->second);
-		this->_comparesentCounter++;
-	}
-	if (last != -1) {
-		lower.push_back(last);
-		upper.push_back(-1);
-	}
-	perfect_algorithm(upper);
 }
 
 

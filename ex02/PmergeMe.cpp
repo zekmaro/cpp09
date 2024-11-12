@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/11 19:06:07 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/12 19:07:04 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #include "PmergeMe.hpp"
 
-PmergeMe::PmergeMe( void ) : _comparesentCounter(DEFAULT_COMPARESENT_COUNTER) {counter = 0;}
+PmergeMe::PmergeMe( void ) : _comparesentCounter(DEFAULT_COMPARESENT_COUNTER) {counter = 1;}
 
 PmergeMe::PmergeMe( const PmergeMe& other ) {
 	(void) other;
@@ -73,28 +73,11 @@ void PmergeMe::convertStringToVector( std::vector<std::string>& args ) {
         this->_vector.push_back(num);
     }
 	this->generateJacobsthalSequence(this->_vector.size());
-	this->initPairs(this->_vector);
 }
 
 // void PmergeMe::binaryInsertion(unsigned int start, unsigned int end, int value) {
 
 // }
-
-void printPairs(const std::vector<std::pair<int, int> >& pairedValues) {
-    // First, print all upper values
-    for (std::vector<std::pair<int, int> >::const_iterator it = pairedValues.begin(); it != pairedValues.end(); ++it) {
-        std::cout << it->second << " ";
-    }
-    std::cout << std::endl;
-
-    // Then, print all corresponding lower values
-    for (std::vector<std::pair<int, int> >::const_iterator it = pairedValues.begin(); it != pairedValues.end(); ++it) {
-        std::cout << it->first << " ";
-    }
-
-    std::cout << std::endl;
-
-}
 
 void printVector( std::vector<int>& vector ) {
 	std::cout << "======" << std::endl;
@@ -105,14 +88,57 @@ void printVector( std::vector<int>& vector ) {
 	std::cout << "======" << std::endl;
 }
 
-void perfect_algorithm( std::vector<int>& upper ) {
-	
+void PmergeMe::printVectorsArr( void ) {
+	std::cout << "======" << std::endl;
+	for (std::vector<std::vector<int> >::iterator itVectorsArr = this->_vectorsArr.begin(); itVectorsArr != this->_vectorsArr.end(); itVectorsArr++) {
+		for (std::vector<int>::iterator itVector = (*itVectorsArr).begin(); itVector != (*itVectorsArr).end(); itVector++) {
+			std::cout << *itVector << " ";
+		}
+		std::cout << std::endl;
+	}
+	std::cout << "======" << std::endl;
+	std::cout << std::endl;
 }
+
+// void perfect_algorithm( std::vector<int>& upper ) {
+	
+// }
 
 void PmergeMe::mergeInsertion() {
+	std::vector<int> upper;
+	std::vector<int> lower;
+	int last = -1;
 
+	if (this->_vector.size() <= 3) {
+		return ;
+	}
+
+	if (this->_vector.size() % 2 == 1) {
+		last = this->_vector.back();
+		this->_vector.pop_back();		
+	}
+
+	for (std::vector<int>::iterator it = this->_vector.begin(); it != this->_vector.end(); it += 2) {
+		if (*it > *(it + 1)) {
+			this->_comparesentCounter++;
+			std::swap(*it, *(it + 1));
+		}
+		lower.push_back(*it);
+		upper.push_back(*(it + 1));
+	}
+	
+	if (last != -1) {
+		lower.push_back(last);
+	}
+
+	this->_vectorsArr.insert(this->_vectorsArr.begin() + this->counter - 1, upper);
+	this->_vectorsArr.insert(this->_vectorsArr.begin() + this->counter * 2 - 1, lower);
+	this->counter++;
+	this->_vector = upper;
+	
+	this->printVectorsArr();
+	this->mergeInsertion();
 }
-
 
 void PmergeMe::generateJacobsthalSequence( int size ) {
 	int j0 = 1;
@@ -130,25 +156,5 @@ void PmergeMe::generateJacobsthalSequence( int size ) {
 		j0 = j1;
 		max = jn;
 		j1 = jn;
-	}
-}
-
-void PmergeMe::initPairs( std::vector<int>& vector ) {
-	// int last = -1;
-
-	// this->printVector();
-
-	// if (this->_vector.size() % 2 == 1) {
-	// 	last = this->_vector.back();
-	// 	this->_vector.pop_back();
-	// }
-	for (std::vector<int>::iterator it = this->_vector.begin(); it != this->_vector.end(); it += 2) {
-		if (it + 1 != this->_vector.end()) {
-			if (*(it + 1) < *it) {
-				std::swap(*it, *(it + 1));
-			}
-			this->_pairedValues.push_back(std::make_pair(*it, *(it + 1)));
-			this->_comparesentCounter++;
-		}
 	}
 }

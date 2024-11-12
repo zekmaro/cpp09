@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrejarama <andrejarama@student.42.fr>    +#+  +:+       +#+        */
+/*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:24 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/11 18:25:26 by andrejarama      ###   ########.fr       */
+/*   Updated: 2024/11/12 18:53:44 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 class PmergeMe {
 	private:
 		std::vector<int> _vector;
+		std::vector<std::vector<int> > _vectorsArr;
 		std::vector<std::pair<int, int> > _pairedValues;
 		int counter;
 		std::vector<int> _jacobSequence;
@@ -59,6 +60,7 @@ class PmergeMe {
 		void binaryInsertion( unsigned int start, unsigned int end, int value );
 		
 		void printVector( void );
+		void printVectorsArr( void );
 
 		void generateJacobsthalSequence( int size );
 

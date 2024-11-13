@@ -6,10 +6,12 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/12 19:07:04 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/13 14:46:15 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <cstddef>
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <cstdlib>
@@ -73,11 +75,9 @@ void PmergeMe::convertStringToVector( std::vector<std::string>& args ) {
         this->_vector.push_back(num);
     }
 	this->generateJacobsthalSequence(this->_vector.size());
+	this->_vectorsArr.push_back(this->_vector);
 }
 
-// void PmergeMe::binaryInsertion(unsigned int start, unsigned int end, int value) {
-
-// }
 
 void printVector( std::vector<int>& vector ) {
 	std::cout << "======" << std::endl;
@@ -100,8 +100,8 @@ void PmergeMe::printVectorsArr( void ) {
 	std::cout << std::endl;
 }
 
-// void perfect_algorithm( std::vector<int>& upper ) {
-	
+// void PmergeMe::binaryInsertion(unsigned int start, unsigned int end, int value) {
+
 // }
 
 void PmergeMe::mergeInsertion() {
@@ -109,36 +109,70 @@ void PmergeMe::mergeInsertion() {
 	std::vector<int> lower;
 	int last = -1;
 
-	if (this->_vector.size() <= 3) {
-		return ;
-	}
-
-	if (this->_vector.size() % 2 == 1) {
-		last = this->_vector.back();
-		this->_vector.pop_back();		
-	}
-
-	for (std::vector<int>::iterator it = this->_vector.begin(); it != this->_vector.end(); it += 2) {
-		if (*it > *(it + 1)) {
-			this->_comparesentCounter++;
-			std::swap(*it, *(it + 1));
+	if (this->counter > 1 && this->_vectorsArr[0].size() <= 3) {
+		if (this->_vectorsArr[0][0] > this->_vectorsArr[0][1]) {
+			std::swap(this->_vectorsArr[0][0], this->_vectorsArr[0][1]);
 		}
-		lower.push_back(*it);
-		upper.push_back(*(it + 1));
+		this->_comparesentCounter++;
+		return;
 	}
 	
+	std::vector<std::vector<int> > newVectorsArr;
+	std::vector<bool> swapRecords;
+
+	std::vector<int> firstVector = this->_vectorsArr[0];
+	if (firstVector.size() % 2 == 1) {
+		last = firstVector.back();
+		firstVector.pop_back();
+	}
+	for (std::vector<int>::iterator it = firstVector.begin(); it != firstVector.end(); it += 2) {
+		if (*it > *(it + 1)) {
+			swapRecords.push_back(true);
+			std::swap(*it, *(it + 1));
+		} else {
+			swapRecords.push_back(false);
+		}
+		this->_comparesentCounter++;
+		upper.push_back(*(it + 1));
+		lower.push_back(*it);
+	}
 	if (last != -1) {
 		lower.push_back(last);
 	}
+	newVectorsArr.push_back(upper);
+	newVectorsArr.push_back(lower);
+	upper.clear();
+	lower.clear();
 
-	this->_vectorsArr.insert(this->_vectorsArr.begin() + this->counter - 1, upper);
-	this->_vectorsArr.insert(this->_vectorsArr.begin() + this->counter * 2 - 1, lower);
+	for (std::vector<std::vector<int> >::iterator itVectorsArr = this->_vectorsArr.begin() + 1; itVectorsArr != this->_vectorsArr.end(); itVectorsArr++) {
+		last = -1;
+		if ((*itVectorsArr).size() % 2 == 1) {
+			last = (*itVectorsArr).back();
+			(*itVectorsArr).pop_back();
+		}
+		int swapIndex = 0;
+		for (std::vector<int>::iterator itVector = (*itVectorsArr).begin(); itVector != (*itVectorsArr).end(); itVector += 2) {
+			if (swapRecords[swapIndex] == true) {
+				std::swap(*itVector, *(itVector + 1));
+			}
+			upper.push_back(*(itVector + 1));
+			lower.push_back(*itVector);
+			swapIndex++;
+		}
+		if (last != -1) {
+			lower.push_back(last);
+		}
+		newVectorsArr.push_back(upper);
+		newVectorsArr.push_back(lower);
+		upper.clear();
+		lower.clear();
+	}
+	this->_vectorsArr = newVectorsArr;
 	this->counter++;
-	this->_vector = upper;
-	
 	this->printVectorsArr();
 	this->mergeInsertion();
 }
+
 
 void PmergeMe::generateJacobsthalSequence( int size ) {
 	int j0 = 1;

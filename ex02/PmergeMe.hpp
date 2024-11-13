@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:24 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/12 18:53:44 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/13 16:14:53 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ class PmergeMe {
 		void convertStringToVector( std::vector<std::string>& args );
 
 		void mergeInsertion( void );
-		void binaryInsertion( unsigned int start, unsigned int end, int value );
+		//void binaryInsertion( unsigned int start, unsigned int end, int value );
 		
 		void printVector( void );
 		void printVectorsArr( void );

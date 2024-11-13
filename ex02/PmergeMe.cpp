@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/13 14:46:15 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/13 16:26:08 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,10 @@ void PmergeMe::convertStringToVector( std::vector<std::string>& args ) {
 
 
 void printVector( std::vector<int>& vector ) {
-	std::cout << "======" << std::endl;
 	for (std::vector<int>::iterator it = vector.begin(); it != vector.end(); it++) {
 		std::cout << *it << " ";
 	}
 	std::cout << std::endl;
-	std::cout << "======" << std::endl;
 }
 
 void PmergeMe::printVectorsArr( void ) {
@@ -100,9 +98,19 @@ void PmergeMe::printVectorsArr( void ) {
 	std::cout << std::endl;
 }
 
-// void PmergeMe::binaryInsertion(unsigned int start, unsigned int end, int value) {
-
-// }
+void binaryInsertion(std::vector<int>& dest, size_t start, size_t end, int value) {
+	if (start == end) {
+		dest.insert(dest.begin() + start, value);
+		return ;
+	}
+	
+	size_t mid = (start + end) / 2;
+	if (dest[mid] > value) {
+		binaryInsertion(dest, start, mid, value);
+	} else if (dest[mid] < value) {
+		binaryInsertion(dest, mid + 1, end, value);
+	}
+}
 
 void PmergeMe::mergeInsertion() {
 	std::vector<int> upper;
@@ -110,10 +118,12 @@ void PmergeMe::mergeInsertion() {
 	int last = -1;
 
 	if (this->counter > 1 && this->_vectorsArr[0].size() <= 3) {
-		if (this->_vectorsArr[0][0] > this->_vectorsArr[0][1]) {
-			std::swap(this->_vectorsArr[0][0], this->_vectorsArr[0][1]);
-		}
 		this->_comparesentCounter++;
+		if (this->_vectorsArr[0][0] > this->_vectorsArr[0][1]) {
+			for (std::vector<std::vector<int> >::iterator itVectorsArr = this->_vectorsArr.begin(); itVectorsArr != this->_vectorsArr.end(); itVectorsArr++) {
+				std::swap((*itVectorsArr)[0], (*itVectorsArr)[1]);
+			}
+		}
 		return;
 	}
 	
@@ -171,8 +181,26 @@ void PmergeMe::mergeInsertion() {
 	this->counter++;
 	this->printVectorsArr();
 	this->mergeInsertion();
+	
+	firstVector.clear();
+	firstVector = this->_vectorsArr[0];
+	std::vector<int> secondVector = this->_vectorsArr[1];
+	int increment = 0;
+	for (size_t i = 0; i < secondVector.size(); i++) {
+		int indexToInsert = _jacobSequence[i] + increment - 1;
+	
+		if (indexToInsert == 0) {
+			firstVector.insert(firstVector.begin() + increment, secondVector[indexToInsert]);
+			secondVector[indexToInsert] = -1;
+			secondVector.insert(secondVector.begin() + increment, -1);
+		} else {
+			::binaryInsertion(firstVector, 0, indexToInsert, secondVector[indexToInsert]);
+		}
+		increment++;
+	}
+	::printVector(firstVector);
+	::printVector(secondVector);
 }
-
 
 void PmergeMe::generateJacobsthalSequence( int size ) {
 	int j0 = 1;

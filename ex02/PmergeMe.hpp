@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:24 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/13 16:14:53 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/14 18:38:31 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ class PmergeMe {
 		void convertStringToVector( std::vector<std::string>& args );
 
 		void mergeInsertion( void );
-		//void binaryInsertion( unsigned int start, unsigned int end, int value );
+		void binaryInsertion(std::vector<int>& dest, size_t start, size_t end, int value, int *destIndex);
 		
 		void printVector( void );
 		void printVectorsArr( void );
 
-		void generateJacobsthalSequence( int size );
+		void generateJacobsthalSequence( size_t size );
 
 		void initPairs( std::vector<int>& vector );
 };

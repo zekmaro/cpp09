@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/14 18:56:46 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/14 19:07:22 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,9 +135,6 @@ void PmergeMe::mergeInsertion() {
 	std::vector<int> lower;
 	int last = -1;
 
-	if (this->counter > 10) {
-		return ;
-	}
 	if (this->counter > 1 && this->_vectorsArr[0].size() <= 3) {
 		this->_comparesentCounter++;
 		if (this->_vectorsArr[0][0] > this->_vectorsArr[0][1]) {
@@ -200,7 +197,6 @@ void PmergeMe::mergeInsertion() {
 	}
 	this->_vectorsArr = newVectorsArr;
 	this->counter++;
-	// this->printVectorsArr();
 	this->mergeInsertion();
 	
 	firstVector.clear();

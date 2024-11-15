@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/14 19:07:22 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/15 18:37:40 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,13 +135,14 @@ void PmergeMe::mergeInsertion() {
 	std::vector<int> lower;
 	int last = -1;
 
-	if (this->counter > 1 && this->_vectorsArr[0].size() <= 3) {
+	if (this->counter > 1 && this->_vectorsArr[0].size() <= 2) {
 		this->_comparesentCounter++;
-		if (this->_vectorsArr[0][0] > this->_vectorsArr[0][1]) {
+		if (this->_vectorsArr[0].size() == 2 && (this->_vectorsArr[0][0] > this->_vectorsArr[0][1])) {
 			for (std::vector<std::vector<int> >::iterator itVectorsArr = this->_vectorsArr.begin(); itVectorsArr != this->_vectorsArr.end(); itVectorsArr++) {
 				std::swap((*itVectorsArr)[0], (*itVectorsArr)[1]);
 			}
 		}
+		this->printVectorsArr();
 		return;
 	}
 	
@@ -197,8 +198,10 @@ void PmergeMe::mergeInsertion() {
 	}
 	this->_vectorsArr = newVectorsArr;
 	this->counter++;
+	this->printVectorsArr();
 	this->mergeInsertion();
 	
+	std::cout << "STARTING INSERTION" << std::endl;
 	firstVector.clear();
 	firstVector = this->_vectorsArr[0];
 	std::vector<int> secondVector = this->_vectorsArr[1];
@@ -217,14 +220,14 @@ void PmergeMe::mergeInsertion() {
 		}
 		size_t indexToInsert = _jacobSequence[i] + increment - 1;
 
-		if (indexToInsert >= secondVector.size()) {
+		if (indexToInsert >= secondVector.size() || decrementFlag == true) {
 			indexToInsert = secondVector.size() - 1;
 			while (secondVector[indexToInsert] == -1) {
 				indexToInsert--;
 			}
 			decrementFlag = true;
 		}
-	
+		std::cout << "inserting " << secondVector[indexToInsert] << std::endl;
 		if (indexToInsert == 0) {
 			firstVector.insert(firstVector.begin() + increment, secondVector[indexToInsert]);
 			secondVector[indexToInsert] = -1;
@@ -244,31 +247,29 @@ void PmergeMe::mergeInsertion() {
 	}
 	
 	newInsertedVectorsArr.push_back(firstVector);
+	if (this->_vectorsArr.size() == 1) {
+		return ;
+	}
+	this->_vectorsArr.erase(this->_vectorsArr.begin());
+	this->_vectorsArr.erase(this->_vectorsArr.begin());
+	this->printVectorsArr();
 
-	if (this->_vectorsArr.size() == 4) {
+	for (std::vector<std::vector<int> >::iterator itVectorsArr = this->_vectorsArr.begin(); itVectorsArr != this->_vectorsArr.end(); itVectorsArr += 2) {
+		firstVector = *itVectorsArr;
+		secondVector = *(itVectorsArr + 1);
+		for (size_t i = 0; i < insertionIndexTableSrc.size(); i++) {
+			int indexToInsert = insertionIndexTableSrc[i];
+			firstVector.insert(firstVector.begin() + insertionIndexTableDest[i], secondVector[indexToInsert]);
+		}
+		if (secondVector.size() < insertionIndexTableSrc.size()) {
+			firstVector.push_back(secondVector.back());
+		}
+		newInsertedVectorsArr.push_back(firstVector);
+		firstVector.clear();
 		secondVector.clear();
-		secondVector = this->_vectorsArr[2];
-		for (size_t i = 0; i < this->_vectorsArr[3].size(); i++) {
-			secondVector.insert(secondVector.begin() + insertionIndexTableDest[i], this->_vectorsArr[3][insertionIndexTableSrc[i]]);
-		}
-		newInsertedVectorsArr.push_back(secondVector);
 	}
-
-	else {
-		for (std::vector<std::vector<int> >::iterator itVectorsArr = this->_vectorsArr.begin() + 2; itVectorsArr != this->_vectorsArr.end(); itVectorsArr += 2) {
-			firstVector = *itVectorsArr;
-			secondVector = *(itVectorsArr + 1);
-			for (size_t i = 0; i < secondVector.size(); i++) {
-				int indexToInsert = insertionIndexTableSrc[i];
-				firstVector.insert(firstVector.begin() + insertionIndexTableDest[i], secondVector[indexToInsert]);
-			}
-			newInsertedVectorsArr.push_back(firstVector);
-			firstVector.clear();
-			secondVector.clear();
-		}
-	}
-	//this->_vectorsArr.clear();
 	this->_vectorsArr = newInsertedVectorsArr;
+	this->printVectorsArr();
 }
 
 void PmergeMe::generateJacobsthalSequence( size_t size ) {

@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/15 18:37:40 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/18 12:32:13 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void PmergeMe::mergeInsertion() {
 				std::swap((*itVectorsArr)[0], (*itVectorsArr)[1]);
 			}
 		}
-		this->printVectorsArr();
+		//this->printVectorsArr();
 		return;
 	}
 	
@@ -198,10 +198,9 @@ void PmergeMe::mergeInsertion() {
 	}
 	this->_vectorsArr = newVectorsArr;
 	this->counter++;
-	this->printVectorsArr();
+	// this->printVectorsArr();
 	this->mergeInsertion();
 	
-	std::cout << "STARTING INSERTION" << std::endl;
 	firstVector.clear();
 	firstVector = this->_vectorsArr[0];
 	std::vector<int> secondVector = this->_vectorsArr[1];
@@ -212,6 +211,7 @@ void PmergeMe::mergeInsertion() {
 	std::vector<int> insertionIndexTableDest;
 	
 	int increment = 0;
+	int decrement2 = 0;
 	bool decrementFlag = false;
 	int tempDestIndex = 0;
 	for (size_t i = 0; i < secondVector.size(); i++) {
@@ -219,7 +219,6 @@ void PmergeMe::mergeInsertion() {
 			break ;
 		}
 		size_t indexToInsert = _jacobSequence[i] + increment - 1;
-
 		if (indexToInsert >= secondVector.size() || decrementFlag == true) {
 			indexToInsert = secondVector.size() - 1;
 			while (secondVector[indexToInsert] == -1) {
@@ -227,7 +226,6 @@ void PmergeMe::mergeInsertion() {
 			}
 			decrementFlag = true;
 		}
-		std::cout << "inserting " << secondVector[indexToInsert] << std::endl;
 		if (indexToInsert == 0) {
 			firstVector.insert(firstVector.begin() + increment, secondVector[indexToInsert]);
 			secondVector[indexToInsert] = -1;
@@ -238,11 +236,12 @@ void PmergeMe::mergeInsertion() {
 			secondVector[indexToInsert] = -1;
 			secondVector.insert(secondVector.begin() + increment, -1);
 		}
-		
-		insertionIndexTableSrc.push_back(indexToInsert - increment);
+		insertionIndexTableSrc.push_back(indexToInsert - increment - decrement2);
 		insertionIndexTableDest.push_back(tempDestIndex);
-		if (decrementFlag == false) {
-			increment++;	
+		if (decrementFlag == true) {
+			decrement2++;
+		} else {
+			increment++;
 		}
 	}
 	
@@ -252,7 +251,7 @@ void PmergeMe::mergeInsertion() {
 	}
 	this->_vectorsArr.erase(this->_vectorsArr.begin());
 	this->_vectorsArr.erase(this->_vectorsArr.begin());
-	this->printVectorsArr();
+	// this->printVectorsArr();
 
 	for (std::vector<std::vector<int> >::iterator itVectorsArr = this->_vectorsArr.begin(); itVectorsArr != this->_vectorsArr.end(); itVectorsArr += 2) {
 		firstVector = *itVectorsArr;
@@ -260,6 +259,7 @@ void PmergeMe::mergeInsertion() {
 		for (size_t i = 0; i < insertionIndexTableSrc.size(); i++) {
 			int indexToInsert = insertionIndexTableSrc[i];
 			firstVector.insert(firstVector.begin() + insertionIndexTableDest[i], secondVector[indexToInsert]);
+			secondVector[insertionIndexTableSrc[i]] = -1;
 		}
 		if (secondVector.size() < insertionIndexTableSrc.size()) {
 			firstVector.push_back(secondVector.back());
@@ -269,7 +269,7 @@ void PmergeMe::mergeInsertion() {
 		secondVector.clear();
 	}
 	this->_vectorsArr = newInsertedVectorsArr;
-	this->printVectorsArr();
+	// this->printVectorsArr();
 }
 
 void PmergeMe::generateJacobsthalSequence( size_t size ) {

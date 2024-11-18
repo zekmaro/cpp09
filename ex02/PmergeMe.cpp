@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/18 12:32:13 by anarama          ###   ########.fr       */
+/*   Updated: 2024/11/18 19:59:51 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,18 +101,16 @@ void PmergeMe::printVectorsArr( void ) {
 
 void PmergeMe::binaryInsertion(std::vector<int>& dest, size_t start, size_t end, int value, int *destIndex) {
 	if (start == end) {
-		this->_comparesentCounter++;
 		dest.insert(dest.begin() + start, value);
 		*destIndex = start;
 		return ;
 	}
 	
+	this->_comparesentCounter++;
 	size_t mid = (start + end) / 2;
 	if (dest[mid] > value) {
-		this->_comparesentCounter++;
 		binaryInsertion(dest, start, mid, value, destIndex);
 	} else if (dest[mid] < value) {
-		this->_comparesentCounter++;
 		binaryInsertion(dest, mid + 1, end, value, destIndex);
 	}
 }
@@ -198,7 +196,7 @@ void PmergeMe::mergeInsertion() {
 	}
 	this->_vectorsArr = newVectorsArr;
 	this->counter++;
-	// this->printVectorsArr();
+	//this->printVectorsArr();
 	this->mergeInsertion();
 	
 	firstVector.clear();
@@ -251,7 +249,7 @@ void PmergeMe::mergeInsertion() {
 	}
 	this->_vectorsArr.erase(this->_vectorsArr.begin());
 	this->_vectorsArr.erase(this->_vectorsArr.begin());
-	// this->printVectorsArr();
+	this->printVectorsArr();
 
 	for (std::vector<std::vector<int> >::iterator itVectorsArr = this->_vectorsArr.begin(); itVectorsArr != this->_vectorsArr.end(); itVectorsArr += 2) {
 		firstVector = *itVectorsArr;
@@ -261,7 +259,7 @@ void PmergeMe::mergeInsertion() {
 			firstVector.insert(firstVector.begin() + insertionIndexTableDest[i], secondVector[indexToInsert]);
 			secondVector[insertionIndexTableSrc[i]] = -1;
 		}
-		if (secondVector.size() < insertionIndexTableSrc.size()) {
+		if (secondVector.size() > insertionIndexTableSrc.size()) {
 			firstVector.push_back(secondVector.back());
 		}
 		newInsertedVectorsArr.push_back(firstVector);
@@ -269,7 +267,7 @@ void PmergeMe::mergeInsertion() {
 		secondVector.clear();
 	}
 	this->_vectorsArr = newInsertedVectorsArr;
-	// this->printVectorsArr();
+	this->printVectorsArr();
 }
 
 void PmergeMe::generateJacobsthalSequence( size_t size ) {

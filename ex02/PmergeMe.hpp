@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:24 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/18 21:05:23 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/09 15:11:55 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ class PmergeMe {
 
 		void initPairs( std::vector<int>& vector );
 
-		bool checkIsSorted( void );
+		bool isSorted(void);
 };
 
 #endif // PMERGE_ME_HPP

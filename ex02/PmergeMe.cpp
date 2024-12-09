@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/18 23:07:29 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/09 15:12:19 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,6 @@ bool vectorIsEmpty( std::vector<int>& vector ) {
 void PmergeMe::mergeInsertion() {
 	std::vector<int> upper;
 	std::vector<int> lower;
-	std::vector<bool> lastTracker;
 	int last = -1;
 
 	if (this->counter > 1 && this->_vectorsArr[0].size() <= 2) {
@@ -141,7 +140,7 @@ void PmergeMe::mergeInsertion() {
 				std::swap((*itVectorsArr)[0], (*itVectorsArr)[1]);
 			}
 		}
-		this->printVectorsArr();
+		//this->printVectorsArr();
 		return;
 	}
 	
@@ -165,9 +164,9 @@ void PmergeMe::mergeInsertion() {
 		lower.push_back(*it);
 	}
 	if (last != -1) {
+		//std::cout << "i removed " << last << std::endl;
 		lower.push_back(last);
-		lastTracker.push_back(false);
-		lastTracker.push_back(true);
+		swapRecords.push_back(false);
 	}
 	newVectorsArr.push_back(upper);
 	newVectorsArr.push_back(lower);
@@ -175,9 +174,9 @@ void PmergeMe::mergeInsertion() {
 	lower.clear();
 
 	for (std::vector<std::vector<int> >::iterator itVectorsArr = this->_vectorsArr.begin() + 1; itVectorsArr != this->_vectorsArr.end(); itVectorsArr++) {
-		last = -1;
 		if ((*itVectorsArr).size() % 2 == 1) {
 			last = (*itVectorsArr).back();
+			//std::cout << "i removed " << last << std::endl;
 			(*itVectorsArr).pop_back();
 		}
 		int swapIndex = 0;
@@ -191,27 +190,16 @@ void PmergeMe::mergeInsertion() {
 		}
 		if (last != -1) {
 			lower.push_back(last);
-			lastTracker.push_back(false);
-			lastTracker.push_back(true);
-		} else {
-			lastTracker.push_back(false);
-			lastTracker.push_back(false);
 		}
+		last = -1;
 		newVectorsArr.push_back(upper);
 		newVectorsArr.push_back(lower);
 		upper.clear();
 		lower.clear();
 	}
-	for (size_t i = 0; i < lastTracker.size(); i++) {
-		if (lastTracker[i] == true) {
-			std::cout << "YES" << std::endl;
-		} else {
-			std::cout << "NO" << std::endl;
-		}
-	}
 	this->_vectorsArr = newVectorsArr;
 	this->counter++;
-	this->printVectorsArr();
+	// this->printVectorsArr();
 	this->mergeInsertion();
 	
 	firstVector.clear();
@@ -251,8 +239,8 @@ void PmergeMe::mergeInsertion() {
 		}
 		insertionIndexTableSrc.push_back(indexToInsert - increment - decrement2);
 		insertionIndexTableDest.push_back(tempDestIndex);
-		::printVector(firstVector);
-		::printVector(secondVector);
+		// ::printVector(firstVector);
+		// ::printVector(secondVector);
 		if (decrementFlag == true) {
 			decrement2++;
 		} else {
@@ -266,10 +254,8 @@ void PmergeMe::mergeInsertion() {
 	}
 	this->_vectorsArr.erase(this->_vectorsArr.begin());
 	this->_vectorsArr.erase(this->_vectorsArr.begin());
-	lastTracker.erase(lastTracker.begin());
-	lastTracker.erase(lastTracker.begin());
-	this->printVectorsArr();
-	::printVector(firstVector);
+	//this->printVectorsArr();
+	// ::printVector(firstVector);
 
 	for (std::vector<std::vector<int> >::iterator itVectorsArr = this->_vectorsArr.begin(); itVectorsArr != this->_vectorsArr.end(); itVectorsArr += 2) {
 		firstVector = *itVectorsArr;
@@ -278,17 +264,20 @@ void PmergeMe::mergeInsertion() {
 			firstVector.push_back(secondVector.back());
 		}
 		for (size_t i = 0; i < insertionIndexTableSrc.size(); i++) {
-			int indexToInsert = insertionIndexTableSrc[i];
-			firstVector.insert(firstVector.begin() + insertionIndexTableDest[i], secondVector[indexToInsert]);
-			secondVector[insertionIndexTableSrc[i]] = -1;
+			size_t indexToInsert = insertionIndexTableSrc[i];
+			if (indexToInsert < secondVector.size()) {
+				firstVector.insert(firstVector.begin() + insertionIndexTableDest[i], secondVector[indexToInsert]);
+				secondVector[insertionIndexTableSrc[i]] = -1;		
+			}
 		}
 		newInsertedVectorsArr.push_back(firstVector);
 		firstVector.clear();
 		secondVector.clear();
 	}
 	this->_vectorsArr = newInsertedVectorsArr;
-	this->printVectorsArr();
+	//this->printVectorsArr();
 }
+
 
 void PmergeMe::generateJacobsthalSequence( size_t size ) {
 	int j0 = 1;
@@ -307,4 +296,16 @@ void PmergeMe::generateJacobsthalSequence( size_t size ) {
 		max = jn;
 		j1 = jn;
 	}
+}
+
+bool PmergeMe::isSorted(void) {
+	std::vector<int> vector = this->_vectorsArr[0];
+	int counter = 1;
+	for (size_t i = 0; i < vector.size(); i++) {
+		if (vector[i] != counter) {
+			return false;
+		}
+		counter++;
+	}
+	return true;
 }

@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:24 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/09 15:11:55 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/10 14:28:53 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,13 @@ class PmergeMe {
 		std::vector<int> _vector;
 		std::vector<std::vector<int> > _vectorsArr;
 		std::vector<std::pair<int, int> > _pairedValues;
-		int counter;
+		int _counterVector;
+		int _counterDeque;
 		std::vector<int> _jacobSequence;
 		std::deque<int> _deque;
-		int _comparesentCounter;
+		std::deque<std::deque<int> > _dequesArr;
+		int _comparesentCounterVector;
+		int _comparesentCounterDeque;
 
 	public:
 		PmergeMe( void );
@@ -51,22 +54,32 @@ class PmergeMe {
 				const char* what() const throw();
 		};
 
-		int getComparesentCounter( void ) const;
+		class NegativeIntegerFoundException: public std::exception {
+			public:
+				const char* what() const throw();
+		};
+
+		int getComparesentCounterVector( void ) const;
 
 		bool IsIntegerOverflow( std::string& number );
 		void convertStringToVector( std::vector<std::string>& args );
 
-		void mergeInsertion( void );
-		void binaryInsertion(std::vector<int>& dest, size_t start, size_t end, int value, int *destIndex);
+		void mergeInsertionVector( void );
+		void mergeInsertionDeque( void );
+		
+		void binaryInsertionVector(std::vector<int>& dest, size_t start, size_t end, int value, int *destIndex);
+		void binaryInsertionDeque(std::deque<int>& dest, size_t start, size_t end, int value, int *destIndex);
 		
 		void printVector( void );
 		void printVectorsArr( void );
+		void printDequesArr( void );
 
 		void generateJacobsthalSequence( size_t size );
 
 		void initPairs( std::vector<int>& vector );
 
-		bool isSorted(void);
+		bool isSorted( void) ;
+		int getSize( void ) const;
 };
 
 #endif // PMERGE_ME_HPP

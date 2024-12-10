@@ -6,11 +6,12 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:51:47 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/10 16:03:30 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/10 16:24:17 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cctype>
+#include <cstddef>
 #include <exception>
 #include <iostream>
 #include <sstream>
@@ -42,7 +43,6 @@ bool isValidChar(char c) {
 bool RPN::validateFormat( const std::string& input ) {
 	for (std::string::const_iterator it = input.begin(); it != input.end(); ++it) {
         if (!isValidChar(*it)) {
-            std::cout << "Incorrect arguments!" << std::endl;
             return false;
         }
     }
@@ -52,17 +52,22 @@ bool RPN::validateFormat( const std::string& input ) {
 	int temp;
 	int operand1;
 	int operand2;
+	int numbers = 0;
+    int operators = 0;
 
 	while (ss >> token) {
 		if (token.length() != 1)
 			return false;
 		if (std::isdigit(token[0])) {
+			numbers++;
 			this->stack.push(token[0] - '0');
 		} else if (token[0] == '*' || token[0] ==  '+' || token[0] ==  '-' || token[0] ==  '/') {
+			operators++;
+			if (this->stack.size() < 2) {
+				return false;
+			}
 			operand2 = this->stack.top();
-			this->stack.pop();
 			operand1 = this->stack.top();
-			this->stack.pop();
 			if (token[0] == '*') {
 				temp = operand1 * operand2;
 			} else if (token[0] == '+') {
@@ -80,21 +85,28 @@ bool RPN::validateFormat( const std::string& input ) {
 			std::cout << "Incorrect arguments!" << std::endl;
 		}
 	}
+	if (numbers - operators != 1) {
+        return false;
+    }
 	return true;
 }
 
 void RPN::fillStack( const std::string& input ) {
 	if (input.empty()) {
-		std::cout << "Empty input!" << std::endl;
+		std::cout << "Error!" << std::endl;
 		return ;
 	}
 	try {
 		if (!validateFormat(input)) {
 			std::cout << "Error!" << std::endl;
 		} else {
-			std::cout << this->stack.top() << std::endl;
+			if (this->stack.size() > 0) {
+				std::cout << this->stack.top() << std::endl;
+			} else {
+				std::cout << "Error!" << std::endl;
+			}
 		}
 	} catch (std::exception& e) {
-		std::cout << "Exception caught!" << e.what() << std::endl;
+		std::cout << "Exception caught!\n" << e.what() << std::endl;
 	}
 }

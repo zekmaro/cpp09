@@ -6,7 +6,7 @@
 #    By: anarama <anarama@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/19 11:54:40 by anarama           #+#    #+#              #
-#    Updated: 2024/11/05 12:51:40 by anarama          ###   ########.fr        #
+#    Updated: 2024/12/10 15:55:51 by anarama          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ CC		:= c++
 
 NAME	:= RPN
 
-CFLAGS	:= -Wall -Wextra -Werror -std=c++98
+CFLAGS	:= -Wall -Wextra -Werror -std=c++98 -g
 
 OBJDIR	:= obj
 

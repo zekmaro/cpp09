@@ -6,7 +6,7 @@
 #    By: anarama <anarama@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/19 11:54:40 by anarama           #+#    #+#              #
-#    Updated: 2024/11/14 18:49:13 by anarama          ###   ########.fr        #
+#    Updated: 2024/12/13 15:00:15 by anarama          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ CC		:= c++
 
 NAME	:= PmergeMe
 
-CFLAGS	:= -Wall -Wextra -Werror -std=c++98 -g
+CFLAGS	:= -Wall -Wextra -Werror -std=c++98
 
 OBJDIR	:= obj
 

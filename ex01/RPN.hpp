@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:51:53 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/13 14:47:57 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/13 15:00:10 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 # include <list>
 # include <string>
 # include <exception>
-
-// store operations in the operation array
 
 class RPN {
 	private:

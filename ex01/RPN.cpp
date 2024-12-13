@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:51:47 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/10 16:24:17 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/13 14:06:26 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ bool RPN::validateFormat( const std::string& input ) {
 				return false;
 			}
 			operand2 = this->stack.top();
+			stack.pop();
 			operand1 = this->stack.top();
+			stack.pop();
 			if (token[0] == '*') {
 				temp = operand1 * operand2;
 			} else if (token[0] == '+') {

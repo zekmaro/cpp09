@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/10 15:42:40 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/13 14:07:36 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,11 @@ void PmergeMe::binaryInsertionVector(std::vector<int>& dest, size_t start, size_
 	size_t mid = (start + end) / 2;
 	if (dest[mid] > value) {
 		binaryInsertionVector(dest, start, mid, value, destIndex);
+	} else if (dest[mid] == value)
+	{
+		dest.insert(dest.begin() + start, value);
+		*destIndex = start;
+		return ;
 	} else {
 		binaryInsertionVector(dest, mid + 1, end, value, destIndex);
 	}
@@ -141,6 +146,11 @@ void PmergeMe::binaryInsertionDeque(std::deque<int>& dest, size_t start, size_t 
 	size_t mid = (start + end) / 2;
 	if (dest[mid] > value) {
 		binaryInsertionDeque(dest, start, mid, value, destIndex);
+	} else if (dest[mid] == value)
+	{
+		dest.insert(dest.begin() + start, value);
+		*destIndex = start;
+		return ;
 	} else {
 		binaryInsertionDeque(dest, mid + 1, end, value, destIndex);
 	}

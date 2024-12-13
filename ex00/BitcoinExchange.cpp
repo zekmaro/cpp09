@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:22:02 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/05 12:49:38 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/13 14:44:48 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,18 +108,32 @@ bool	BitcoinExchange::isValidDate( std::string& date ) {
 
 bool	BitcoinExchange::isValidRate( std::string& rateStr ) {
 	float rate;
+	int dotCounter = 0;
 
-	for (unsigned int i = 0; i < rateStr.length(); i++) {
-		if (std::isalpha(rateStr[i])) {
-			std::cout << "Error: letters found in the rate." << std::endl;
+	if (rateStr.size() == 1) {
+		std::cout << "Error: empty rate." << std::endl;
+		return false;
+	}
+	if (rateStr[0] == '.') {
+		std::cout << "Error: wrong format for rate." << std::endl;
+		return false;
+	}
+	for (unsigned int i = 1; i < rateStr.length(); i++) {
+		if (!std::isdigit(rateStr[i])) {
+			if (dotCounter > 1) {
+				std::cout << "Error: wrong format for rate." << std::endl;
+				return false;
+			}
+			if (rateStr[i] == '.') {
+				dotCounter++;
+				break ;
+			}
+			std::cout << "Error: wrong format for rate." << std::endl;
 			return false;
 		}
 	}
 	std::istringstream(rateStr) >> rate;
-	if (rate < 0) {
-		std::cout << "Error: not a positive number." << std::endl;
-		return false;
-	} else if (rate > 1000) {
+	if (rate > 1000) {
 		std::cout << "Error: too large a number." << std::endl;
 		return false;
 	}
@@ -164,9 +178,10 @@ void	BitcoinExchange::exhange( std::string& dateStr, std::string& rateStr, float
 			std::cout << "Date is less than the very first date in the data set!" << std::endl;
 			return ;
 		}
-		while (it->first < dateStr) {
+		while (it != this->_mapData.end() && it->first < dateStr) {
 			it++;
 		}
+		it--;
 	}
 	std::cout << dateStr << "=>" << rateStr << " = " << it->second * rate << std::endl;
 }

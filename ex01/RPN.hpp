@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:51:53 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/05 15:18:01 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/13 14:47:57 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define RPN_HPP
 
 # include <stack>
+# include <list>
 # include <string>
 # include <exception>
 
@@ -21,7 +22,7 @@
 
 class RPN {
 	private:
-		std::stack<int> stack;
+		std::stack<int, std::list<int> > stack;
 	public:
 		RPN( void );
 		RPN( const RPN& other );

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
+/*   By: andrejarama <andrejarama@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:22:36 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/05 11:52:32 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/16 16:14:44 by andrejarama      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ int main(int argc, char **argv) {
 	}
 	try {
 		BitcoinExchange a(argv[1]);
-		a.initMap();
+		if (!a.initMap()) {
+			std::cout << "you fucked up my friend!" << std::endl;
+			return 1;
+		}
 		a.parseInput();
 	} catch (std::exception& e) {
 		std::cout << "Exception caught: " << e.what() << std::endl;

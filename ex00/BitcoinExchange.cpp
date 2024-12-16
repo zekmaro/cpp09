@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
+/*   By: andrejarama <andrejarama@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:22:02 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/13 14:44:48 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/16 22:32:46 by andrejarama      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 #include <cctype>
+#include <cstdlib>
 #include <map>
 #include <string>
 #include <sstream>
@@ -47,20 +48,32 @@ BitcoinExchange::~BitcoinExchange( void ) {
 	this->_data.close();
 }
 
-void	BitcoinExchange::initMap( void ) {
+bool	BitcoinExchange::initMap( void ) {
 	float rate;
 	std::string date;
 	std::string rateStr;
 	std::string tempStr;
+	int check = 0;
 
 	std::getline(this->_data, tempStr); // skip the header
+	if (tempStr.empty()) {
+		return false;
+	}
 	while (std::getline(this->_data, tempStr)) {
+		check = 1;
 		std::istringstream ss(tempStr);
 		if (std::getline(ss, date, ',') && std::getline(ss, rateStr)) {
+			if (date.empty() || rateStr.empty()) {
+				return false;
+			}
 			std::istringstream(rateStr) >> rate;
 			this->_mapData[date + " "] = rate;
 		}
 	}
+	if (check == 0) {
+		return false;
+	}
+	return true;
 }
 
 bool	BitcoinExchange::isValidDate( std::string& date ) {
@@ -109,28 +122,28 @@ bool	BitcoinExchange::isValidDate( std::string& date ) {
 bool	BitcoinExchange::isValidRate( std::string& rateStr ) {
 	float rate;
 	int dotCounter = 0;
+	bool number_started = false;
 
-	if (rateStr.size() == 1) {
-		std::cout << "Error: empty rate." << std::endl;
-		return false;
-	}
-	if (rateStr[0] == '.') {
+	if (rateStr.size() == 1 || rateStr[0] != ' ') {
 		std::cout << "Error: wrong format for rate." << std::endl;
 		return false;
 	}
 	for (unsigned int i = 1; i < rateStr.length(); i++) {
 		if (!std::isdigit(rateStr[i])) {
-			if (dotCounter > 1) {
-				std::cout << "Error: wrong format for rate." << std::endl;
-				return false;
-			}
 			if (rateStr[i] == '.') {
 				dotCounter++;
-				break ;
+				if (dotCounter > 1 || number_started == false) {
+					std::cout << "Error: wrong format for rate." << std::endl;
+					return false;
+				} else if (dotCounter == 1) {
+					continue ;
+				}
+			} else {
+				std::cout << "Error: wrong format for rate." << std::endl;
+				return false;	
 			}
-			std::cout << "Error: wrong format for rate." << std::endl;
-			return false;
 		}
+		number_started = true;
 	}
 	std::istringstream(rateStr) >> rate;
 	if (rate > 1000) {

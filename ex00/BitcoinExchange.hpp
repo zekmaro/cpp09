@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
+/*   By: andrejarama <andrejarama@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:22:04 by anarama           #+#    #+#             */
-/*   Updated: 2024/11/05 12:49:27 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/16 16:13:07 by andrejarama      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class BitcoinExchange {
 				const char* what() const throw();
 		};
 
-		void	initMap( void );
+		bool	initMap( void );
 		void	parseInput( void );
 
 		bool	isValidDate( std::string& dateStr );

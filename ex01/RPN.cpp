@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:51:47 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/17 12:41:17 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/17 17:52:34 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ bool RPN::validateFormat( const std::string& input ) {
 	
 	std::istringstream ss(input);
 	std::string token;
-	size_t temp;
-	int operand1;
-	int operand2;
+	long long temp;
+	long long operand1;
+	long long operand2;
 	int numbers = 0;
     int operators = 0;
 
@@ -86,7 +86,7 @@ bool RPN::validateFormat( const std::string& input ) {
 				}
 				temp = operand1 / operand2;
 			}
-			if (temp > INT_MAX) {
+			if (temp > INT_MAX || temp < INT_MIN) {
 				throw IntegerOverflowException();
 			}
 			this->stack.push(temp);

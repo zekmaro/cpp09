@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:51:53 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/17 12:41:03 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/17 17:52:22 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <exception>
 
 # define INT_MAX 2147483647
+# define INT_MIN -2147483648
 
 class RPN {
 	private:

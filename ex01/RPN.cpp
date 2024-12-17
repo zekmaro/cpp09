@@ -6,11 +6,12 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:51:47 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/13 14:59:10 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/17 12:41:17 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cctype>
+#include <cstddef>
 #include <exception>
 #include <iostream>
 #include <sstream>
@@ -34,6 +35,10 @@ const char* RPN::DivisionByZeroException::what() const throw() {
 	return "Error! Trying to divide by zero!";
 }
 
+const char* RPN::IntegerOverflowException::what() const throw() {
+	return "Error! Integer overflow!";
+}
+
 bool isValidChar(char c) {
     const std::string validChars = "0123456789+-/*";
     return validChars.find(c) != std::string::npos || std::isspace(c);
@@ -48,7 +53,7 @@ bool RPN::validateFormat( const std::string& input ) {
 	
 	std::istringstream ss(input);
 	std::string token;
-	int temp;
+	size_t temp;
 	int operand1;
 	int operand2;
 	int numbers = 0;
@@ -80,6 +85,9 @@ bool RPN::validateFormat( const std::string& input ) {
 					throw DivisionByZeroException();
 				}
 				temp = operand1 / operand2;
+			}
+			if (temp > INT_MAX) {
+				throw IntegerOverflowException();
 			}
 			this->stack.push(temp);
 		} else {

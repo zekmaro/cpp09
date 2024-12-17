@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:51:53 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/13 15:00:10 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/17 12:41:03 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <string>
 # include <exception>
 
+# define INT_MAX 2147483647
+
 class RPN {
 	private:
 		std::stack<int, std::list<int> > stack;
@@ -28,6 +30,11 @@ class RPN {
 		~RPN( void );
 
 		class DivisionByZeroException: public std::exception {
+			public:
+				const char* what() const throw();
+		};
+
+		class IntegerOverflowException: public std::exception {
 			public:
 				const char* what() const throw();
 		};

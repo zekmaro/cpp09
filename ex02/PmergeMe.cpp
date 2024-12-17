@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:27 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/13 14:07:36 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/17 12:51:42 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,14 +188,16 @@ void PmergeMe::mergeInsertionVector() {
 	std::vector<int> lower;
 	int last = -1;
 
-	if (this->_counterVector > 1 && this->_vectorsArr[0].size() <= 2) {
-		this->_comparesentCounterVector++;
+	if (this->_vectorsArr[0].size() <= 2) {
+		if (this->_vectorsArr[0].size() == 2) {
+			this->_comparesentCounterVector++;
+		}
 		if (this->_vectorsArr[0].size() == 2 && (this->_vectorsArr[0][0] > this->_vectorsArr[0][1])) {
 			for (std::vector<std::vector<int> >::iterator itVectorsArr = this->_vectorsArr.begin(); itVectorsArr != this->_vectorsArr.end(); itVectorsArr++) {
 				std::swap((*itVectorsArr)[0], (*itVectorsArr)[1]);
 			}
 		}
-		//this->printVectorsArr();
+		// this->printVectorsArr();
 		return;
 	}
 

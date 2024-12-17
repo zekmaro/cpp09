@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrejarama <andrejarama@student.42.fr>    +#+  +:+       +#+        */
+/*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:22:02 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/16 22:32:46 by andrejarama      ###   ########.fr       */
+/*   Updated: 2024/12/17 12:34:13 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 #include <cctype>
+#include <cstddef>
 #include <cstdlib>
 #include <map>
 #include <string>
@@ -60,6 +61,9 @@ bool	BitcoinExchange::initMap( void ) {
 		return false;
 	}
 	while (std::getline(this->_data, tempStr)) {
+		if (tempStr.empty()) {
+			return false;
+		}
 		check = 1;
 		std::istringstream ss(tempStr);
 		if (std::getline(ss, date, ',') && std::getline(ss, rateStr)) {
@@ -85,8 +89,14 @@ bool	BitcoinExchange::isValidDate( std::string& date ) {
 	std::istringstream ss(date);
 
 	if (date.length() != 11 || date[date.length() - 1] != ' ') {
-		std::cout << "Error: bad input. Invalid date" << std::endl;
+		std::cout << "Error: bad input => " << date << std::endl;
 		return false;
+	}
+	for (size_t i = 0; i < date.length() - 1; i++) {
+		if (i != 4 && i != 7 && !std::isdigit(date[i])) {
+			std::cout << "Error: bad input => " << date << std::endl;
+			return false;
+		}
 	}
 	if (!(ss >> year >> dash1 >> month >> dash2 >> day) || dash1 != '-' || dash2 != '-') {
 		std::cout << "Error: bad input. Invalid date" << std::endl;

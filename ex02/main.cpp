@@ -6,7 +6,7 @@
 /*   By: anarama <anarama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:00:29 by anarama           #+#    #+#             */
-/*   Updated: 2024/12/10 15:40:56 by anarama          ###   ########.fr       */
+/*   Updated: 2024/12/17 12:58:01 by anarama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 		// } else {
 		// 	std::cout << "I HAVE A BAD NEWS BRO!" << std::endl;
 		// }
-		std::cout << "Num of comparesents: " << a.getComparesentCounterVector() << std::endl;
+		// std::cout << "Num of comparesents: " << a.getComparesentCounterVector() << std::endl;
 	} catch (std::exception& e) {
 		std::cerr << "Exception caught!\n" << e.what() << std::endl;
 	}
